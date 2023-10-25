@@ -99,10 +99,7 @@ To run the project, execute the following command:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- AUTHORS -->
-
 ## 👥 Authors <a name="authors"></a>
-
 👤 *Menendez NELSON*
 
 - GitHub: [@menendezon](https://github.com/menendezon)
