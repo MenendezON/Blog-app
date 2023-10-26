@@ -58,6 +58,8 @@
 - **Create post**
 - **Like post**
 - **Comment post**
+- **Create models**
+- **Create methods**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
