@@ -60,6 +60,8 @@
 - **Comment post**
 - **Create models**
 - **Create methods**
+- **Generate the spec folder**
+- **Generate the test files**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
