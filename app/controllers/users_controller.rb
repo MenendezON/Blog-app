@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
   # /users
-  def index
-  end
+  def index; end
 
   # /users/:id
   def show
