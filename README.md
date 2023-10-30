@@ -62,6 +62,8 @@
 - **Create methods**
 - **Generate the spec folder**
 - **Generate the test files**
+- **Create the Users and Posts controllers**
+- **Create the views for the both controllers**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
