@@ -1,13 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe Like, type: :model do
-  let(:user) { User.create(name: 'John Doe', photo: 'photo', bio: 'bio') }
-  let(:post) { Post.create(title: 'title', text: 'text', author: user) }
+  before :all do
+    @user = User.create(name: 'Someone', photo: '', bio: 'Yet another human.')
+    @user.save
+    @post = Post.create(author: @user, title: 'Hello world', text: 'Hello world body')
+    @post.save
+    @like = Like.create(user: @user, post: @post)
+  end
 
-  let(:like) { Like.new(post_id: post.id, author_id: user.id) }
-  before { like.save }
+  describe 'Associations' do
+    it 'should belong to an author' do
+      expect(@like.user).to eq(@user)
+    end
 
-  it 'is valid with valid attributes' do
-    expect(like).to_not be_valid
+    it 'should belong to a post' do
+      expect(@like.post).to eq(@post)
+    end
   end
 end
