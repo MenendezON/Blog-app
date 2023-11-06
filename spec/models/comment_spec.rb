@@ -1,14 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
-  let(:user) { User.create(name: 'John Doe', photo: 'photo', bio: 'bio') }
-  let(:post) { Post.create(title: 'title', text: 'text', author_id: user) }
+  before :all do
+    @user = User.create(name: 'Someone', photo: '', bio: 'Yet another human.')
+    @user.save
+    @post = Post.create(author: @user, title: 'Hello world', text: 'Hello world body')
+    @post.save
+    @comment = Comment.create(user: @user, post: @post, text: 'Hello world comment')
+  end
 
-  let(:comment) { Comment.new(text: 'text', post_id: post.id, author_id: user.id) }
+  describe 'Associations' do
+    it 'should belong to an author' do
+      expect(@comment.user).to eq(@user)
+    end
 
-  before { comment.save }
-
-  it 'is valid with valid attributes' do
-    expect(comment).to_not be_valid
+    it 'should belong to a post' do
+      expect(@comment.post).to eq(@post)
+    end
   end
 end
