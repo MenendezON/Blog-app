@@ -4,7 +4,7 @@ class User < ApplicationRecord
   has_many :likes
 
   def three_most_recent_posts
-    Post.where(author: self).order(created_at: :desc).limit(3)
+    Post.where(author_id: self).order(created_at: :desc).limit(3)
   end
 
   # Add validations
