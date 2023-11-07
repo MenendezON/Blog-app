@@ -14,7 +14,7 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(params.require(:post).permit(:title, :text))
+    @post = Post.new(post_params)
     @post.author = current_user
     if @post.save
       flash[:success] = 'Post created successfully!'
@@ -23,5 +23,10 @@ class PostsController < ApplicationController
       flash.now[:error] = 'Error: Post could not be created!'
       render :new, locals: { post: @post }
     end
+  end
+
+  private 
+  def post_params
+    params.require(:post).permit(:title, :text)
   end
 end
