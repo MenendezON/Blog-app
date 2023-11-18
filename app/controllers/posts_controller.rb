@@ -1,7 +1,10 @@
 class PostsController < ApplicationController
-  # /users/:user_id/posts
+
   def index
-    @posts = Post.where(author_id: params[:user_id])
+    set_user
+    @user = User.find(params[:user_id])
+    @posts = Post.includes(:author).where(author_id: params[:user_id])
+    @posts = @posts.paginate(page: params[:page], per_page: 3)
   end
 
   # /users/:user_id/posts/:id
