@@ -72,8 +72,5 @@ end
 gem 'rubocop', '>= 1.0', '< 2.0'
 gem 'will_paginate'
 
-<<<<<<< HEAD
-gem 'devise', '~> 4.9'
-=======
 gem 'cancancan'
->>>>>>> 55df4f1683ae22bee2ab19f8c18e05a6bafc9bb9
+gem 'devise', '~> 4.9'
