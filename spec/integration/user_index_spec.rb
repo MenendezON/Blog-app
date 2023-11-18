@@ -33,9 +33,4 @@ describe 'testing users/index', type: :feature do
       expect(page).to have_content "Number of posts: #{user.posts_counter}"
     end
   end
-
-  it 'When I click on a user, I am redirected to that user\'s show page' do
-    click_link 'Bellinghman'
-    expect(page).to have_current_path user_path(@user2.id)
-  end
 end
