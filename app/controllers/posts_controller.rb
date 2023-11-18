@@ -1,53 +1,27 @@
 class PostsController < ApplicationController
-  load_and_authorize_resource
-
-  before_action :authenticate_user!
+  # /users/:user_id/posts
   def index
-    @comments = Comment.all
-    @user = User.find(params[:user_id])
-    @posts = @user.posts.includes(:comments)
+    @posts = Post.where(author_id: params[:user_id])
   end
 
+  # /users/:user_id/posts/:id
   def show
-    @post = Post.new
-    @posts = Post.all
-    @post = Post.find params[:id]
-    @user = current_user
-    @post_id = @posts.index(@post) + 1
+    @post = Post.find(params[:id])
   end
 
   def new
-    @user = User.find(params[:user_id])
-    @post = @user.posts.build
+    @post = Post.new
   end
 
   def create
-    @current_user = User.find(params[:user_id])
-    @post = @current_user.posts.build(post_params)
-    @post.comments_counter = 0
-    @post.likes_counter = 0
-
+    @post = Post.new(post_params)
+    @post.author = current_user
     if @post.save
-      redirect_to user_post_path(@current_user.id, @post.id), notice: 'Post was successfully Created'
+      flash[:success] = 'Post created successfully!'
+      redirect_to user_posts_url
     else
-      flash[:alert] = 'Error creating the post'
-      render :new
-    end
-  end
-
-  def destroy
-    @user = User.find(params[:user_id])
-    post = Post.find(params[:id])
-    authorize! :destroy, post
-
-    post.comments.destroy_all
-    post.likes.destroy_all
-    if post.destroy
-      flash[:success] = 'Post deleted successfully'
-      redirect_to user_posts_path(@user)
-    else
-      flash.now[:error] = 'Error: Post could not be deleted'
-      redirect_to user_post_path(@user, post)
+      flash.now[:error] = 'Error: Post could not be created!'
+      render :new, locals: { post: @post }
     end
   end
 

@@ -1,35 +1,24 @@
 class CommentsController < ApplicationController
-  before_action :authenticate_user!
   def new
-    @post = Post.find(params[:post_id])
     @comment = Comment.new
-    @user = @current_user
+    @post_id = params[:id]
   end
 
   def create
-    @user = User.find(params[:user_id])
-    @post = Post.find(params[:post_id])
-    @comment = @post.comments.new(comment_params.merge(author: @user))
-
+    @comment = Comment.new(comments_param)
+    @comment.user = current_user
     if @comment.save
-      redirect_to user_post_path(@user, @post), notice: 'Comment was successfully created.'
+      flash[:success] = 'Comment created successfully!'
+      redirect_to user_post_path(id: @comment.post_id, user_id: @comment.user_id)
     else
-      render :new
+      flash.now[:error] = 'Error: Comment could not be created!'
+      render :new, locals: { comment: @comment }
     end
-  end
-
-  # destroy the comment
-  def destroy
-    @comment = Comment.find(params[:id])
-    @post = @comment.post
-    @post.decrement!(:comments_counter)
-    @comment.destroy
-    redirect_to user_post_path(author_id: @post.author_id, id: @post.id), notice: 'Comment successfully deleted'
   end
 
   private
 
-  def comment_params
-    params.require(:comment).permit(:text)
+  def comments_param
+    params.require(:comment).permit(:text, :user_id, :post_id)
   end
 end

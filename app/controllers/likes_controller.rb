@@ -1,16 +1,12 @@
 class LikesController < ApplicationController
-  before_action :authenticate_user!
   def create
-    @user = User.find(params[:user_id])
-    @post = Post.find(params[:post_id])
-    @like = Like.new(user: @user, post: @post)
-
+    @like = Like.new(post_id: params[:post_id], user_id: params[:user_id])
+    @like.user = current_user
     if @like.save
-      flash[:notice] = 'Like was successfully created.'
+      flash[:success] = 'Liked !'
+      redirect_to user_post_path(id: @like.post_id, user_id: @like.user_id)
     else
-      flash[:alert] = 'Failed to add like.'
+      flash.now[:error] = 'Something went wrong!'
     end
-
-    redirect_to user_post_path(@user, @post)
   end
 end
