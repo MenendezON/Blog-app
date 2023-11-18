@@ -4,7 +4,8 @@ require 'capybara/rails'
 
 RSpec.describe 'User View', type: :feature do
   before :each do
-    @user = User.create(name: 'Harry', photo: 'https://somewhere.com/an_ordinary_photo.jpg', bio: 'Anyone in this world')
+    @user = User.create(name: 'Harry', photo: 'https://somewhere.com/an_ordinary_photo.jpg',
+                        bio: 'Anyone in this world')
     @user.save
   end
 
