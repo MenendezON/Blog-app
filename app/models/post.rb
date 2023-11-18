@@ -1,32 +1,24 @@
 class Post < ApplicationRecord
-  belongs_to :author, class_name: 'User', foreign_key: 'author_id'
-  has_many :comments
+  belongs_to :author, class_name: 'User'
   has_many :likes
-  after_save :update_post_counter
+  has_many :comments
 
-  def five_recent_comments
-    Comment.where(post_id: id).order(created_at: :desc).limit(5)
+  attribute :title, :string
+  attribute :text, :text
+  attribute :comments_counter, :integer, default: 0
+  attribute :likes_counter, :integer, default: 0
+
+  validates :title, presence: true, length: { maximum: 250 }
+  validates :comments_counter, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :likes_counter, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+
+  after_save :update_user_post_counter
+
+  def update_user_post_counter
+    author.update(post_counter: author.posts.count)
   end
 
-  def update_post_counter
-    author.increment!(:posts_counter)
+  def five_most_recent_comments
+    comments.order(created_at: :desc).limit(5)
   end
-
-  def all_comments
-    Comment.where(post_id: id)
-  end
-
-  # Add validations
-
-  # Title must not be blank.
-  validates :title, presence: true
-
-  # Title must not exceed 250 characters.
-  validates :title, length: { maximum: 250 }
-
-  # CommentsCounter must be an integer greater than or equal to zero.
-  validates :comments_counter, numericality: { allow_nil: true, only_integer: true, greater_than_or_equal_to: 0 }
-
-  # LikesCounter must be an integer greater than or equal to zero.
-  validates :likes_counter, numericality: { allow_nil: true, only_integer: true, greater_than_or_equal_to: 0 }
 end
