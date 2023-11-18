@@ -1,4 +1,5 @@
 class PostsController < ApplicationController
+  before_action :set_user, only: %i[new create]
 
   def index
     set_user
@@ -7,28 +8,42 @@ class PostsController < ApplicationController
     @posts = @posts.paginate(page: params[:page], per_page: 3)
   end
 
-  # /users/:user_id/posts/:id
-  def show
-    @post = Post.find(params[:id])
-  end
-
   def new
-    @post = Post.new
+    @post = @user.posts.build
   end
 
   def create
-    @post = Post.new(post_params)
-    @post.author = current_user
+    @post = current_user.posts.build(post_params)
     if @post.save
-      flash[:success] = 'Post created successfully!'
-      redirect_to user_posts_url
+      redirect_to user_post_path(current_user, @post), notice: 'Post Created successfully'
     else
-      flash.now[:error] = 'Error: Post could not be created!'
-      render :new, locals: { post: @post }
+      puts @post.errors.full_messages
+      render :new
+    end
+  end
+
+  def show
+    set_user
+    @post = Post.includes(:author).find_by(author_id: params[:user_id], id: params[:id])
+  end
+
+  def like
+    @post = Post.find(params[:id])
+    if current_user.likes.exists?(post: @post)
+      redirect_to @post, alert: 'You have already liked this post.'
+    else
+      current_user.likes.create(post: @post)
+      redirect_to @post, notice: 'Post liked!'
     end
   end
 
   private
+
+  def set_user
+    @user = current_user
+  rescue ActiveRecord::RecordNotFound
+    render plain: 'User not found', status: :not_found
+  end
 
   def post_params
     params.require(:post).permit(:title, :text)
