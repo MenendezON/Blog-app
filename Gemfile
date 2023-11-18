@@ -71,11 +71,6 @@ end
 
 gem 'rubocop', '>= 1.0', '< 2.0'
 
-<<<<<<< HEAD
 gem 'bootstrap', '~> 5.1.0'
 gem 'database_cleaner'
 gem 'rails-controller-testing'
-=======
-gem 'cancancan'
-gem 'devise', '~> 4.9'
->>>>>>> 6640f6b7b802eb5598e9fb7de6d1b37490b95fd9
