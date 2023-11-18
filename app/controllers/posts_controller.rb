@@ -1,53 +1,39 @@
 class PostsController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_user, only: %i[new create]
 
-  before_action :authenticate_user!
   def index
-    @comments = Comment.all
+    set_user
     @user = User.find(params[:user_id])
-    @posts = @user.posts.includes(:comments)
-  end
-
-  def show
-    @post = Post.new
-    @posts = Post.all
-    @post = Post.find params[:id]
-    @user = current_user
-    @post_id = @posts.index(@post) + 1
+    @posts = Post.includes(:author).where(author_id: params[:user_id])
+    @posts = @posts.paginate(page: params[:page], per_page: 3)
   end
 
   def new
-    @user = User.find(params[:user_id])
     @post = @user.posts.build
   end
 
   def create
-    @current_user = User.find(params[:user_id])
-    @post = @current_user.posts.build(post_params)
-    @post.comments_counter = 0
-    @post.likes_counter = 0
-
+    @post = current_user.posts.build(post_params)
     if @post.save
-      redirect_to user_post_path(@current_user.id, @post.id), notice: 'Post was successfully Created'
+      redirect_to user_post_path(current_user, @post), notice: 'Post Created successfully'
     else
-      flash[:alert] = 'Error creating the post'
+      puts @post.errors.full_messages
       render :new
     end
   end
 
-  def destroy
-    @user = User.find(params[:user_id])
-    post = Post.find(params[:id])
-    authorize! :destroy, post
+  def show
+    set_user
+    @post = Post.includes(:author).find_by(author_id: params[:user_id], id: params[:id])
+  end
 
-    post.comments.destroy_all
-    post.likes.destroy_all
-    if post.destroy
-      flash[:success] = 'Post deleted successfully'
-      redirect_to user_posts_path(@user)
+  def like
+    @post = Post.find(params[:id])
+    if current_user.likes.exists?(post: @post)
+      redirect_to @post, alert: 'You have already liked this post.'
     else
-      flash.now[:error] = 'Error: Post could not be deleted'
-      redirect_to user_post_path(@user, post)
+      current_user.likes.create(post: @post)
+      redirect_to @post, notice: 'Post liked!'
     end
   end
 

@@ -1,49 +1,42 @@
+# spec/requests/users_controller_spec.rb
 require 'rails_helper'
 
-RSpec.describe 'Users', type: :request do
-  context 'GET /index' do
-    before :each do
+RSpec.describe UsersController, type: :request do
+  fixtures :users
+
+  describe 'GET #index' do
+    it 'returns a successful response' do
       get users_path
+      expect(response).to have_http_status(200)
     end
 
-    it 'renders the right view file' do
+    it 'renders the index template' do
+      get users_path
       expect(response).to render_template(:index)
     end
 
-    it 'returns http status 200' do
-      expect(response.status).to eq(200)
-    end
-
-    it 'returns successful response' do
-      expect(response).to be_successful
-    end
-
-    it 'renders the right placeholder' do
-      expect(response.body).to include('<h1>Here is a list for all the users</h1>')
+    it 'includes correct placeholder text in the response body' do
+      get users_path
+      expect(response.body).to include('All Users')
     end
   end
 
-  context 'GET /show' do
-    let(:valid_attributes) { { 'name' => 'Tom' } }
-    let(:user) { User.create! valid_attributes }
-    before :each do
-      get user_url(user)
-    end
+  describe 'GET #show' do
+    let(:user) { users(:user_one) }
 
-    it 'renders the right view file' do
-      expect(response).to render_template(:show)
-    end
-
-    it 'returns http status 200' do
-      expect(response.status).to eq(200)
-    end
-
-    it 'returns successful response' do
+    it 'returns a successful response' do
+      get user_path(user.id)
       expect(response).to be_successful
     end
 
-    it 'renders the right placeholder' do
-      expect(response.body).to include('<h1>Here is the user for the given id</h1>')
+    it 'renders the show template' do
+      get user_path(user.id)
+      expect(response).to render_template(:show)
+    end
+
+    it 'includes correct placeholder text in the response body' do
+      get user_path(user.id)
+      expect(response.body).to include('User Profile')
     end
   end
 end

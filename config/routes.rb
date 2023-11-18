@@ -1,21 +1,14 @@
-# frozen_string_literal: true
-
 Rails.application.routes.draw do
-
-  root to: 'users#index'
-  
+  root 'users#index'
   resources :users, only: %i[index show] do
-    resources :posts, only: %i[index show new create destroy] do
-      resources :comments, only: %i[index new create destroy]
-      resources :likes, only: [:create]
+    resources :posts, only: %i[index show]
+  end
+
+  resources :posts do
+    resources :comments, only: %i[new create]
+    resources :likes, only: %i[new create]
+    member do
+      post 'like'
     end
   end
-  # With this, you have shorter code to write and you keep it simple, stupid.
-  
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
-
-  # Defines the root path route ("/")
-  # root "posts#index"
 end
