@@ -106,11 +106,18 @@ To run the project, execute the following command:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## 👥 Authors <a name="authors"></a>
+
 👤 *Menendez NELSON*
 
 - GitHub: [@menendezon](https://github.com/menendezon)
 - Twitter: [@menendezon](https://twitter.com/menendezon)
 - LinkedIn: [MenendezON](https://linkedin.com/in/menendezon)
+
+👤 **Ian Kiema**
+
+- GitHub: [@githubhandle](https://github.com/iankiema)
+- Twitter: [@twitterhandle](https://twitter.com/IanMwas2)
+- LinkedIn: [LinkedIn](https://linkedin.com/in/ian-kiema)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
