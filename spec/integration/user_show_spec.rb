@@ -66,4 +66,9 @@ RSpec.describe 'User View', type: :feature do
     click_link 'See all post'
     expect(page).to have_current_path(user_posts_path(@user))
   end
+
+  it 'redirects when clicked on a user' do
+    visit user_path(@user)
+    click_link(@user)
+  end
 end
