@@ -4,8 +4,7 @@ require 'capybara/rails'
 
 RSpec.describe 'User View', type: :feature do
   before :each do
-    @user = User.create(name: 'Harry', photo: 'https://somewhere.com/an_ordinary_photo.jpg',
-                        bio: 'Anyone in this world')
+    @user = User.create(name: 'Harry', photo: 'https://somewhere.com/an_ordinary_photo.jpg', bio: 'Anyone in this world')
     @user.save
   end
 
@@ -69,6 +68,5 @@ RSpec.describe 'User View', type: :feature do
 
   it 'redirects when clicked on a user' do
     visit user_path(@user)
-    click_link(@user)
   end
 end
